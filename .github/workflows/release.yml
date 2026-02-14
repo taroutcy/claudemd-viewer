@@ -1,0 +1,50 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # v1.0.0 などのタグでトリガー
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
+    - name: Build app
+      run: |
+        xcodebuild -scheme ClaudeMDViewer \
+          -configuration Release \
+          -derivedDataPath build \
+          -archivePath build/ClaudeMDViewer.xcarchive \
+          archive
+
+        xcodebuild -exportArchive \
+          -archivePath build/ClaudeMDViewer.xcarchive \
+          -exportPath build \
+          -exportOptionsPlist ExportOptions.plist
+
+    - name: Create DMG
+      run: |
+        # .appファイルをDMGに変換
+        hdiutil create -volname "ClaudeMD Viewer" \
+          -srcfolder "build/ClaudeMDViewer.app" \
+          -ov -format UDZO \
+          "ClaudeMDViewer.dmg"
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ClaudeMDViewer.dmg
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

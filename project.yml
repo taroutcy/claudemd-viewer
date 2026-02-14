@@ -1,0 +1,56 @@
+name: ClaudeMDViewer
+options:
+  bundleIdPrefix: com.claudemd
+  deploymentTarget:
+    macOS: "12.0"
+  developmentLanguage: en
+  xcodeVersion: "14.0"
+
+packages:
+  Markdown:
+    url: https://github.com/apple/swift-markdown
+    from: 0.4.0
+
+settings:
+  MARKETING_VERSION: "1.0.0"
+  CURRENT_PROJECT_VERSION: "1"
+  GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  ClaudeMDViewer:
+    type: application
+    platform: macOS
+    deploymentTarget: "12.0"
+    info:
+      path: ClaudeMDViewer/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: $(DEVELOPMENT_LANGUAGE)
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSUIElement: true
+    sources:
+      - ClaudeMDViewer
+      - Views
+      - Models
+      - ViewModels
+      - Services
+      - Utilities
+    resources:
+      - ClaudeMDViewer/Assets.xcassets
+    dependencies:
+      - package: Markdown
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.claudemd.viewer
+      SWIFT_VERSION: "5.9"
+      MACOSX_DEPLOYMENT_TARGET: "12.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+      ENABLE_PREVIEWS: YES
+      DEVELOPMENT_ASSET_PATHS: "\"ClaudeMDViewer/Preview Content\""
+      SWIFT_EMIT_LOC_STRINGS: YES
